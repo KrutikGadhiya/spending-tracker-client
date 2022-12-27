@@ -6,18 +6,23 @@ import Logo from "../assets/logo.png";
 const Header = () => {
   const { email, name } = useContext(UserContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   let dropdownRef = useClickOutside(() => setIsDropdownOpen(false));
+  let sidebarRef = useClickOutside(() => setIsSidebarOpen(false));
 
   return (
     <header className="fixed w-screen z-10">
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 min-h-[60px]">
         <div className="flex flex-wrap justify-between items-center">
-          <div className="flex justify-start items-center">
+          <div ref={sidebarRef} className="flex justify-start items-center">
             {/* <button
               id="toggleSidebar"
               aria-expanded="true"
@@ -39,9 +44,10 @@ const Header = () => {
               </svg>
             </button> */}
             <button
-              aria-expanded="true"
-              aria-controls="sidebar"
-              data-dropdown-toggle="notification-dropdown"
+              // aria-expanded="true"
+              // aria-controls="sidebar"
+              // data-dropdown-toggle="notification-dropdown"
+              onClick={toggleSidebar}
               className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <svg
@@ -73,8 +79,21 @@ const Header = () => {
               <span className="sr-only">Toggle sidebar</span>
             </button>
             <div
-              className="hidden overflow-hidden z-50 my-4 min-w-[16rem] max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700"
+              className={`${
+                isSidebarOpen ? "" : "hidden"
+              } overflow-hidden z-50 my-4 min-w-[16rem] h-screen max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700`}
               id="notification-dropdown"
+              style={
+                isSidebarOpen
+                  ? {
+                      position: "absolute",
+                      top: "60px",
+                      left: "0px",
+                      margin: "0px",
+                      // transform: "translate(761px, 56px)",
+                    }
+                  : {}
+              }
             >
               {/* <div className="block py-2 px-4 text-base font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 Notifications
