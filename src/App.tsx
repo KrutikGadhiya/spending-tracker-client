@@ -11,11 +11,7 @@ import { LoaderContext } from "./context/LoaderContext";
 import "./App.css";
 
 const Dummy = ({ title }: { title: string }) => {
-  return (
-    <div className="h-screen bg-gray-200">
-      <h1 className="tet-6xl">{title}</h1>
-    </div>
-  );
+  return <h1 className="text-2xl">{title}</h1>;
 };
 
 function App() {
@@ -28,6 +24,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />}>
+          <Route index element={<Dummy title="Home" />} />
           <Route path="transactions" element={<Dummy title="Transactions" />} />
         </Route>
       </Routes>
