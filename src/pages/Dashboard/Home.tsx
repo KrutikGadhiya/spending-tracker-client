@@ -7,7 +7,7 @@ const Home = () => {
     <div className="">
       <Header />
       <Sidebar />
-      <section className="p-2 lg:ml-64 mt-[60px]">
+      <section className="p-2 lg:ml-64 mt-[60px] bg-gray-200 min-h-[calc(100vh-60px)]">
         {/* <h1 className="text-2xl">Home</h1> */}
         <Outlet />
       </section>
@@ -184,7 +184,7 @@ const sideNavLink = [
     label: "Overview",
   },
   {
-    to: "/transactions",
+    to: "transactions",
     icon: (
       <svg
         aria-hidden="true"
@@ -199,7 +199,7 @@ const sideNavLink = [
     label: "Transactions",
   },
   {
-    to: "/groups",
+    to: "groups",
     icon: (
       <svg
         aria-hidden="true"
@@ -231,6 +231,7 @@ const Sidebar = () => {
           {sideNavLink.map((link, index) => (
             <li key={index}>
               <NavLink
+                end
                 to={link.to}
                 style={({ isActive }) =>
                   isActive ? activeSideNavLink : undefined
