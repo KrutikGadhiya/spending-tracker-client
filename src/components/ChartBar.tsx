@@ -61,7 +61,11 @@ const ChartBar = () => {
           contentStyle={{ fontSize: "0.8rem" }}
         />
         <Legend
-          content={<p className="text-center mt-2 font-semibold">Category</p>}
+          content={
+            <p className="text-center text-gray-900 dark:text-white mt-2 font-semibold">
+              Category
+            </p>
+          }
         />
         <Bar dataKey="amount" fill="#2563eb" />
       </BarChart>

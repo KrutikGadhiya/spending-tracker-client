@@ -23,16 +23,19 @@ const ChartLine = () => {
           data={data}
           type="monotone"
           dataKey="amount"
-          strokeWidth={2}
+          // strokeWidth={2}
           fill="#2563eb"
           label
+          outerRadius={120}
         >
-          <Cell key={"cell-debit"} fill="#2563eb" />
-          <Cell key={"cell-credit"} fill="#facc15" />
+          <Cell key={"cell-debit"} fill="#32B14A" />
+          <Cell key={"cell-credit"} fill="#F1592A" />
         </Pie>
         <Legend
           content={
-            <p className="text-center mt-2 font-semibold">Transaction Type</p>
+            <p className="text-center text-gray-900 dark:text-white mt-2 font-semibold">
+              Transaction Type
+            </p>
           }
         />
       </PieChart>

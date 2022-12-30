@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 interface UserContextInterface {
   email: string;
@@ -28,6 +28,14 @@ const initialState: UserContextInterface = {
 
 const UserContextProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState(initialState);
+
+  useEffect(() => {
+    let textUser = localStorage.getItem("user");
+    if (!textUser) return;
+
+    const user = JSON.parse(textUser);
+    login(user);
+  }, []);
 
   const login = (user: UserContextInterface) => {
     setUser({

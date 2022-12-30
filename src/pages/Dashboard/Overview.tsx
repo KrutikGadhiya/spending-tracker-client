@@ -9,7 +9,7 @@ const Overview = () => {
     <div className="grid gap-2">
       <div>
         <WhiteCard>
-          <section className="bg-white dark:bg-gray-900">
+          <section className="bg-white dark:bg-gray-800">
             <div className="max-w-screen-xl px-4 py-8 mx-auto text-center lg:py-16 lg:px-6">
               <dl className="grid grid-cols-2 max-w-screen-md gap-8 mx-auto text-gray-900 sm:grid-cols-3 md:grid-cols-4 dark:text-white">
                 <div className="flex flex-col items-center justify-center">

@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 // Context
 import LoaderContextProvider from "./context/LoaderContext";
 import UserContextProvider from "./context/UserContext";
+import ToggleDarkModeProvider from "./context/ToggleDarkMode";
 
 import "./index.css";
 
@@ -15,13 +16,15 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <LoaderContextProvider>
-        <UserContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </UserContextProvider>
-      </LoaderContextProvider>
+      <ToggleDarkModeProvider>
+        <LoaderContextProvider>
+          <UserContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserContextProvider>
+        </LoaderContextProvider>
+      </ToggleDarkModeProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

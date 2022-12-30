@@ -53,7 +53,11 @@ const ChartRadarBar = () => {
           contentStyle={{ fontSize: "0.8rem" }}
         />
         <Legend
-          content={<p className="text-center mt-2 font-semibold">Type</p>}
+          content={
+            <p className="text-center text-gray-900 dark:text-white mt-2 font-semibold">
+              Type
+            </p>
+          }
         />
       </RadarChart>
     </ResponsiveContainer>

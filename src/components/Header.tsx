@@ -1,21 +1,263 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
+import {
+  Modal,
+  Label,
+  TextInput,
+  Checkbox,
+  Button,
+  Select,
+} from "flowbite-react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { ToggleDarkMode } from "../context/ToggleDarkMode";
 import { useClickOutside } from "../hooks";
 import Logo from "../assets/logo.png";
 
 const Header = () => {
   const { email, name } = useContext(UserContext);
+  const { darkMode, toggleDarkMode } = useContext(ToggleDarkMode);
+
+  const [show, setShow] = useState(false);
+
+  const toggleTransactionModal = () => {
+    setShow(!show);
+  };
+
+  const onClose = () => {
+    setShow(false);
+  };
 
   return (
-    <header className="fixed top-0 w-screen z-10 border-b border-gray-200">
+    <header className="fixed top-0 w-screen z-10 border-b border-gray-200 dark:border-gray-700">
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 min-h-[60px]">
-        <div className="flex flex-wrap justify-between items-center">
+        <div className="flex flex-wrap items-center">
           <SideBarMenu />
+          <button
+            onClick={toggleTransactionModal}
+            type="button"
+            className="ml-auto mr-4 text-white inline-flex items-center bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            <svg
+              className="mr-1 -ml-1 w-6 h-6"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+            Add new
+          </button>
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            className=" mr-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+          >
+            {darkMode ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+                className="w-5 h-5"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+                className="w-5 h-5"
+              >
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+              </svg>
+            )}
+          </button>
           <ProfileMenu name={name} email={email} />
         </div>
+        <TransactionModel show={show} onClose={onClose} />
       </nav>
     </header>
+  );
+};
+// amount, category, paidWith, transactionType, type, description, date,
+// type: // Income or Spend or Transfer or Balance
+// transactionType: // Deit or Credit
+// paidWith: // Cash or Card or Gpay or Phonepe or Paytm or UPI
+// category: // Transport or Food or Rent or Personal or Balance or Other
+const TransactionModel = ({
+  onClose,
+  show,
+}: {
+  show: boolean;
+  onClose: () => void;
+}) => {
+  return (
+    <Modal
+      show={show}
+      size="4xl"
+      position="center"
+      // popup={true}
+      onClose={onClose}
+    >
+      <Modal.Header>Add new transaction</Modal.Header>
+      <Modal.Body>
+        <div className="space-y-6">
+          <form>
+            <div className="grid gap-4 mb-4 sm:grid-cols-2">
+              <div>
+                <Label
+                  htmlFor="TransactionType"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Transaction Type
+                </Label>
+                <Select
+                  id="TransactionType"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                >
+                  <option value="Debit">Debit</option>
+                  <option value="Credit">Credit</option>
+                </Select>
+              </div>
+              <div>
+                <Label
+                  htmlFor="Type"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Type
+                </Label>
+                <Select
+                  id="Type"
+                  defaultValue="select"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                >
+                  <option value="select">Select category</option>
+                  <option value="Income">Income</option>
+                  <option value="Spend">Spend</option>
+                  <option value="Transfer">Transfer</option>
+                  <option value="Balance">Balance</option>
+                </Select>
+              </div>
+              <div>
+                <Label
+                  htmlFor="PaidWith"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Paid With
+                </Label>
+                <Select
+                  name="PaidWith"
+                  id="PaidWith"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  required
+                >
+                  <option value="Cash">Cash</option>
+                  <option value="Card">Card</option>
+                  <option value="UPI">UPI</option>
+                  <option value="Other">Other</option>
+                </Select>
+              </div>
+              <div>
+                <Label
+                  htmlFor="category"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Category
+                </Label>
+                <Select
+                  id="category"
+                  defaultValue="select"
+                  placeholder="Select category"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                >
+                  <option value="select">Select category</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Food">Food</option>
+                  <option value="Rent">Rent</option>
+                  <option value="Personal">Personal</option>
+                  <option value="Balance">Balance</option>
+                  <option value="Other">Other</option>
+                </Select>
+              </div>
+              <div>
+                <Label
+                  htmlFor="Amount"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Amount
+                </Label>
+                <TextInput
+                  type="number"
+                  name="Amount"
+                  id="Amount"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="₹500"
+                  required
+                />
+              </div>
+              <div>
+                <Label
+                  htmlFor="Date"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Date
+                </Label>
+                <TextInput
+                  type="date"
+                  name="Date"
+                  id="Date"
+                  // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="₹500"
+                  required
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <Label
+                  htmlFor="description"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Description
+                </Label>
+                <textarea
+                  id="description"
+                  rows={4}
+                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Write product description here"
+                ></textarea>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            >
+              <svg
+                className="mr-1 -ml-1 w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              Add new product
+            </button>
+          </form>
+        </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 
@@ -83,7 +325,7 @@ const ProfileMenu = ({ name, email }: { name: string; email: string }) => {
   let dropdownRef = useClickOutside(() => setIsDropdownOpen(false));
 
   return (
-    <div ref={dropdownRef} className="flex items-center lg:order-2">
+    <div ref={dropdownRef} className="flex items-center lg:order-2 mr-2">
       <button
         onClick={toggleDropdown}
         type="button"
@@ -242,7 +484,7 @@ const SideBarMenu = () => {
       </div>
       <div className="flex mr-4">
         <img src={Logo} className="mr-3 h-8" alt="FlowBite Logo" />
-        <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+        <span className="self-center hidden md:block text-2xl font-semibold whitespace-nowrap dark:text-white">
           SpendingTracker
         </span>
       </div>
