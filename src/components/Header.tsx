@@ -252,7 +252,7 @@ const TransactionModel = ({
                   clipRule="evenodd"
                 ></path>
               </svg>
-              Add new product
+              Add new Transaction
             </button>
           </form>
         </div>
@@ -455,7 +455,7 @@ const SideBarMenu = () => {
           isSidebarOpen
             ? {
                 position: "absolute",
-                top: "60px",
+                top: "64px",
                 left: "0px",
                 margin: "0px",
               }

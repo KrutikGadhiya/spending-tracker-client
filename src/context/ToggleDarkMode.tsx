@@ -20,6 +20,7 @@ const ToggleDarkModeProvider: React.FC<Props> = ({ children }) => {
 
   const toggle = () => {
     toggleDarkMode(!darkMode);
+    document.body.classList.toggle("dark", !darkMode);
     localStorage.setItem("darkMode", JSON.stringify(!darkMode));
   };
 
@@ -27,6 +28,7 @@ const ToggleDarkModeProvider: React.FC<Props> = ({ children }) => {
     const darkMode = localStorage.getItem("darkMode")
       ? localStorage.getItem("darkMode") === "true"
       : false;
+    document.body.classList.toggle("dark", darkMode);
     toggleDarkMode(darkMode);
   }, []);
 
