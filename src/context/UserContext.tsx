@@ -16,12 +16,14 @@ interface Props {
 
 export const UserContext = createContext({} as UserContextInterface);
 
+let textUser = localStorage.getItem("user");
+
 const initialState: UserContextInterface = {
   email: "",
-  id: "",
+  id: textUser ? JSON.parse(textUser).id : "",
   name: "",
   role: "",
-  token: "",
+  token: textUser ? JSON.parse(textUser).token : "",
   login: (user: UserContextInterface) => {},
   logout: () => {},
 };
@@ -34,6 +36,7 @@ const UserContextProvider: React.FC<Props> = ({ children }) => {
     if (!textUser) return;
 
     const user = JSON.parse(textUser);
+
     login(user);
   }, []);
 

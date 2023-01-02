@@ -1,20 +1,19 @@
 import { useContext, useState } from "react";
-import {
-  Modal,
-  Label,
-  TextInput,
-  Checkbox,
-  Button,
-  Select,
-} from "flowbite-react";
+import { Modal, Label, TextInput, Select } from "flowbite-react";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
+
+// context
 import { UserContext } from "../context/UserContext";
+import { LoaderContext } from "../context/LoaderContext";
 import { ToggleDarkMode } from "../context/ToggleDarkMode";
+
+import { Transaction, createTransaction } from "../api/transaction";
 import { useClickOutside } from "../hooks";
 import Logo from "../assets/logo.png";
 
 const Header = () => {
-  const { email, name } = useContext(UserContext);
+  const { email, name, id, token } = useContext(UserContext);
   const { darkMode, toggleDarkMode } = useContext(ToggleDarkMode);
 
   const [show, setShow] = useState(false);
@@ -84,7 +83,7 @@ const Header = () => {
           </button>
           <ProfileMenu name={name} email={email} />
         </div>
-        <TransactionModel show={show} onClose={onClose} />
+        <TransactionModel id={id} show={show} onClose={onClose} token={token} />
       </nav>
     </header>
   );
@@ -97,10 +96,63 @@ const Header = () => {
 const TransactionModel = ({
   onClose,
   show,
+  id,
+  token,
 }: {
   show: boolean;
+  id: string;
   onClose: () => void;
+  token: string;
 }) => {
+  // const { id } = useContext(UserContext);
+  // console.log(id);
+
+  const { setIsLoading } = useContext(LoaderContext);
+  const [transaction, setTransaction] = useState<Transaction>({
+    amount: 0,
+    category: "Personal",
+    paidWith: "UPI",
+    transactionType: "Debit",
+    type: "Spend",
+    description: "description...",
+    date: new Date(),
+    userId: id,
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setTransaction({ ...transaction, [name]: value, userId: id });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // setTransaction({ ...transaction, userId: id });
+    console.log(transaction);
+    const { data, status } = await createTransaction(transaction, token);
+    if (status !== 200) {
+      toast(data.message, {
+        type: "error",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
+    } else {
+      toast("Transaction added successfully", {
+        type: "success",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
+      onClose();
+    }
+    setIsLoading(false);
+  };
+
   return (
     <Modal
       show={show}
@@ -112,7 +164,7 @@ const TransactionModel = ({
       <Modal.Header>Add new transaction</Modal.Header>
       <Modal.Body>
         <div className="space-y-6">
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-4 mb-4 sm:grid-cols-2">
               <div>
                 <Label
@@ -123,6 +175,9 @@ const TransactionModel = ({
                 </Label>
                 <Select
                   id="TransactionType"
+                  name="transactionType"
+                  onChange={handleChange}
+                  required
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
                   <option value="Debit">Debit</option>
@@ -138,7 +193,10 @@ const TransactionModel = ({
                 </Label>
                 <Select
                   id="Type"
+                  name="type"
+                  onChange={handleChange}
                   defaultValue="select"
+                  required
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
                   <option value="select">Select category</option>
@@ -150,14 +208,15 @@ const TransactionModel = ({
               </div>
               <div>
                 <Label
-                  htmlFor="PaidWith"
+                  htmlFor="paidWith"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Paid With
                 </Label>
                 <Select
-                  name="PaidWith"
-                  id="PaidWith"
+                  name="paidWith"
+                  id="paidWith"
+                  onChange={handleChange}
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required
                 >
@@ -176,8 +235,11 @@ const TransactionModel = ({
                 </Label>
                 <Select
                   id="category"
+                  name="category"
+                  onChange={handleChange}
                   defaultValue="select"
                   placeholder="Select category"
+                  required
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
                   <option value="select">Select category</option>
@@ -191,15 +253,16 @@ const TransactionModel = ({
               </div>
               <div>
                 <Label
-                  htmlFor="Amount"
+                  htmlFor="amount"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Amount
                 </Label>
                 <TextInput
                   type="number"
-                  name="Amount"
-                  id="Amount"
+                  name="amount"
+                  id="amount"
+                  onChange={handleChange}
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="₹500"
                   required
@@ -207,15 +270,16 @@ const TransactionModel = ({
               </div>
               <div>
                 <Label
-                  htmlFor="Date"
+                  htmlFor="date"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Date
                 </Label>
                 <TextInput
                   type="date"
-                  name="Date"
-                  id="Date"
+                  name="date"
+                  id="date"
+                  onChange={handleChange}
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="₹500"
                   required
@@ -231,6 +295,8 @@ const TransactionModel = ({
                 <textarea
                   id="description"
                   rows={4}
+                  name="description"
+                  onChange={handleChange}
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Write product description here"
                 ></textarea>

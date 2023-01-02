@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 // Pages & Components
 import { Login, SignUp } from "./pages";
@@ -19,14 +19,14 @@ const Dummy = ({ title }: { title: string }) => {
 function App() {
   const { isLoading } = useContext(LoaderContext);
 
-  useEffect(() => {
-    toast("Hello World", {
-      type: "success",
-      position: "top-center",
-      theme: "dark",
-      autoClose: 2000,
-    });
-  }, []);
+  // useEffect(() => {
+  //   toast("Hello World", {
+  //     type: "success",
+  //     position: "top-center",
+  //     theme: "dark",
+  //     autoClose: 2000,
+  //   });
+  // }, []);
 
   return (
     <div className="App">

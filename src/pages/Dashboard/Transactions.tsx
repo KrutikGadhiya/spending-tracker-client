@@ -1,97 +1,101 @@
+import { useContext, useState } from "react";
 import { Table, Badge } from "flowbite-react";
+import { useQuery } from "react-query";
+import { getTransactions } from "../../api/transaction";
+import { UserContext } from "../../context/UserContext";
 
-const transactions = [
-  {
-    uuid: "1",
-    amount: 500,
-    category: "Food",
-    transactionType: "Credit",
-    type: "Spend",
-    description: "Bought a pizza",
-    date: "2021-01-01",
-  },
-  {
-    uuid: "2",
-    amount: 126,
-    category: "Transport",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "BRTS to Meditab",
-    date: "2021-01-02",
-  },
-  {
-    uuid: "4",
-    amount: 126,
-    category: "Transport",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "BRTS to Meditab",
-    date: "2021-01-02",
-  },
-  {
-    uuid: "3",
-    amount: 500,
-    category: "Food",
-    transactionType: "Credit",
-    type: "Spend",
-    description: "Bought a pizza",
-    date: "2021-01-01",
-  },
-  {
-    uuid: "5",
-    amount: 500,
-    category: "Food",
-    transactionType: "Credit",
-    type: "Spend",
-    description: "Bought a pizza",
-    date: "2021-01-01",
-  },
-  {
-    uuid: "6",
-    amount: 126,
-    category: "Transport",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "BRTS to Meditab",
-    date: "2021-01-02",
-  },
-  {
-    uuid: "6",
-    amount: 126,
-    category: "Transport",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "BRTS to Meditab",
-    date: "2021-01-02",
-  },
-  {
-    uuid: "6",
-    amount: 126,
-    category: "Transport",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "BRTS to Meditab",
-    date: "2021-01-02",
-  },
-  {
-    uuid: "3",
-    amount: 500,
-    category: "Food",
-    transactionType: "Credit",
-    type: "Spend",
-    description: "Bought a pizza",
-    date: "2021-01-01",
-  },
-  {
-    uuid: "3",
-    amount: 500,
-    category: "Food",
-    transactionType: "Credit",
-    type: "Spend",
-    description: "Bought a pizza",
-    date: "2021-01-01",
-  },
-];
+// const transactions = [
+//   {
+//     uuid: "1",
+//     amount: 500,
+//     category: "Food",
+//     transactionType: "Credit",
+//     type: "Spend",
+//     description: "Bought a pizza",
+//     date: "2021-01-01",
+//   },
+//   {
+//     uuid: "2",
+//     amount: 126,
+//     category: "Transport",
+//     transactionType: "Debit",
+//     type: "Spend",
+//     description: "BRTS to Meditab",
+//     date: "2021-01-02",
+//   },
+//   {
+//     uuid: "4",
+//     amount: 126,
+//     category: "Transport",
+//     transactionType: "Debit",
+//     type: "Spend",
+//     description: "BRTS to Meditab",
+//     date: "2021-01-02",
+//   },
+//   {
+//     uuid: "3",
+//     amount: 500,
+//     category: "Food",
+//     transactionType: "Credit",
+//     type: "Spend",
+//     description: "Bought a pizza",
+//     date: "2021-01-01",
+//   },
+//   {
+//     uuid: "5",
+//     amount: 500,
+//     category: "Food",
+//     transactionType: "Credit",
+//     type: "Spend",
+//     description: "Bought a pizza",
+//     date: "2021-01-01",
+//   },
+//   {
+//     uuid: "6",
+//     amount: 126,
+//     category: "Transport",
+//     transactionType: "Debit",
+//     type: "Spend",
+//     description: "BRTS to Meditab",
+//     date: "2021-01-02",
+//   },
+//   {
+//     uuid: "7",
+//     amount: 126,
+//     category: "Transport",
+//     transactionType: "Debit",
+//     type: "Spend",
+//     description: "BRTS to Meditab",
+//     date: "2021-01-02",
+//   },
+//   {
+//     uuid: "8",
+//     amount: 126,
+//     category: "Transport",
+//     transactionType: "Debit",
+//     type: "Spend",
+//     description: "BRTS to Meditab",
+//     date: "2021-01-02",
+//   },
+//   {
+//     uuid: "9",
+//     amount: 500,
+//     category: "Food",
+//     transactionType: "Credit",
+//     type: "Spend",
+//     description: "Bought a pizza",
+//     date: "2021-01-01",
+//   },
+//   {
+//     uuid: "10",
+//     amount: 500,
+//     category: "Food",
+//     transactionType: "Credit",
+//     type: "Spend",
+//     description: "Bought a pizza",
+//     date: "2021-01-01",
+//   },
+// ];
 
 const reduceCharacters = (str: string) => {
   if (str.length > 30) {
@@ -101,6 +105,26 @@ const reduceCharacters = (str: string) => {
 };
 
 const Transactions = () => {
+  const { id, token } = useContext(UserContext);
+  // console.log(id, token);
+
+  const { data, isLoading, isError } = useQuery(
+    ["transactions", { id, token }],
+    getTransactions,
+    {
+      refetchInterval: 10000,
+    }
+  );
+
+  const transactions = data?.data;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (isError) {
+    return <div>Error</div>;
+  }
+
   return (
     <Table className="shadow-md" hoverable={true}>
       <Table.Head className="bg-gray-100 dark:bg-gray-600">
@@ -122,7 +146,7 @@ const Transactions = () => {
         </Table.HeadCell>
       </Table.Head>
       <Table.Body className="divide-y">
-        {transactions.map((tnx, i) => (
+        {transactions?.map((tnx: any, i: number) => (
           <Table.Row
             key={tnx.uuid}
             className="bg-white dark:border-gray-700 dark:bg-gray-800"
