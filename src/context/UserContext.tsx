@@ -7,7 +7,7 @@ interface UserContextInterface {
   role: string;
   token: string;
   login: ({}: UserContextInterface) => void;
-  logout: ({}) => void;
+  logout: () => void;
 }
 
 interface Props {

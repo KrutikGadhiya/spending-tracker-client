@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Modal, Label, TextInput, Select } from "flowbite-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // context
@@ -382,7 +382,14 @@ const activeSideNavLink = {
 };
 
 const ProfileMenu = ({ name, email }: { name: string; email: string }) => {
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { logout } = useContext(UserContext);
+
+  const handleLogout = () => {
+    navigate("/", { replace: true });
+    logout();
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -456,12 +463,12 @@ const ProfileMenu = ({ name, email }: { name: string; email: string }) => {
           aria-labelledby="dropdown"
         >
           <li>
-            <a
-              href="#"
-              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+            <p
+              onClick={handleLogout}
+              className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
             >
               Sign out
-            </a>
+            </p>
           </li>
         </ul>
       </div>

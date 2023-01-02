@@ -1,7 +1,50 @@
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { register } from "../api/auth";
+
+// context
+import { LoaderContext } from "../context/LoaderContext";
+
 import Logo from "../assets/logo.png";
 
 const signup = () => {
+  const navigate = useNavigate();
+  const { setIsLoading } = useContext(LoaderContext);
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (userDetails.password !== userDetails.confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+    const { status } = await register(
+      userDetails.email,
+      userDetails.password,
+      userDetails.name
+    );
+    if (status !== 200) {
+      toast.error("Something went wrong");
+    }
+    if (status === 200) {
+      navigate("/");
+    }
+    setIsLoading(false);
+  };
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -14,7 +57,7 @@ const signup = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Register your account
             </h1>
-            <form className="space-y-2 md:space-y-4" action="#">
+            <form className="space-y-2 md:space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor="name"
@@ -26,6 +69,7 @@ const signup = () => {
                   type="text"
                   name="name"
                   id="name"
+                  onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name"
                   required
@@ -42,6 +86,7 @@ const signup = () => {
                   type="email"
                   name="email"
                   id="email"
+                  onChange={handleChange}
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                   required
@@ -58,6 +103,7 @@ const signup = () => {
                   type="password"
                   name="password"
                   id="password"
+                  onChange={handleChange}
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
@@ -65,15 +111,16 @@ const signup = () => {
               </div>
               <div>
                 <label
-                  htmlFor="confirm-password"
+                  htmlFor="confirmPassword"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Confirm Password
                 </label>
                 <input
                   type="password"
-                  name="confirm-password"
-                  id="confirm-password"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  onChange={handleChange}
                   placeholder="••••••••"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
