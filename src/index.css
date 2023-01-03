@@ -5,3 +5,7 @@
 .Toastify__close-button {
   @apply text-gray-900 dark:text-gray-200;
 }
+
+.editBtn > span {
+  @apply px-1 py-1;
+}

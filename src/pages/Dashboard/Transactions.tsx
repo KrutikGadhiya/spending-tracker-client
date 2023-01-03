@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
-import { Table, Badge } from "flowbite-react";
+import { Table, Badge, Button } from "flowbite-react";
 import { useQuery } from "react-query";
 import { getTransactions } from "../../api/transaction";
 import { UserContext } from "../../context/UserContext";
+
+import PackManLoading from "../../components/PackManLoading";
 
 // const transactions = [
 //   {
@@ -112,14 +114,14 @@ const Transactions = () => {
     ["transactions", { id, token }],
     getTransactions,
     {
-      refetchInterval: 10000,
+      refetchInterval: 30000,
     }
   );
 
   const transactions = data?.data;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <PackManLoading />;
   }
   if (isError) {
     return <div>Error</div>;
@@ -127,7 +129,7 @@ const Transactions = () => {
 
   return (
     <Table className="shadow-md" hoverable={true}>
-      <Table.Head className="bg-gray-100 dark:bg-gray-600">
+      <Table.Head className="bg-gray-200 dark:bg-gray-600">
         <Table.HeadCell className="font-extrabold py-4">Sr. No.</Table.HeadCell>
         <Table.HeadCell className="font-extrabold py-4">
           Category
@@ -157,7 +159,9 @@ const Transactions = () => {
             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
               {reduceCharacters(tnx.description)}
             </Table.Cell>
-            <Table.Cell>{tnx.date}</Table.Cell>
+            <Table.Cell>
+              {new Date(tnx.date).toDateString().slice(4)}
+            </Table.Cell>
             <Table.Cell>
               {tnx.transactionType === "Credit" ? (
                 <Badge className="max-w-max" color="success">
@@ -173,12 +177,14 @@ const Transactions = () => {
               ₹{tnx.amount}
             </Table.Cell>
             <Table.Cell>
-              <a
+              {/* <a
                 href="/tables"
                 className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-              >
+              > */}
+              <Button size="xs" className="editBtn" color="light">
                 Edit
-              </a>
+              </Button>
+              {/* </a> */}
             </Table.Cell>
           </Table.Row>
         ))}
