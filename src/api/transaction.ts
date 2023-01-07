@@ -1,17 +1,6 @@
 import axios from "axios";
-
+import { Transaction } from "../types";
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
-
-export type Transaction = {
-  amount: number;
-  category: "Transport" | "Food" | "Rent" | "Personal" | "Balance" | "Other";
-  paidWith: "Cash" | "Card" | "UPI" | "Other";
-  transactionType: "Credit" | "Debit";
-  type: "Income" | "Spend" | "Transfer" | "Balance";
-  description: string;
-  date: Date;
-  userId: string;
-};
 
 export const createTransaction = async (
   transaction: Transaction,
@@ -19,6 +8,22 @@ export const createTransaction = async (
 ) => {
   const response = await axios.post(
     `${BASE_URL}/api/transaction`,
+    transaction,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const updateTransaction = async (
+  transaction: Transaction,
+  token: string
+) => {
+  const response = await axios.put(
+    `${BASE_URL}/api/transaction/${transaction.uuid}`,
     transaction,
     {
       headers: {

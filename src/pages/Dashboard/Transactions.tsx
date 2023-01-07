@@ -4,6 +4,8 @@ import { useQuery } from "react-query";
 import { getTransactions } from "../../api/transaction";
 import { UserContext } from "../../context/UserContext";
 
+import { updateTransaction } from "../../api/transaction";
+import TransactionModel from "../../components/TranactionModal";
 import PackManLoading from "../../components/PackManLoading";
 
 // const transactions = [
@@ -108,7 +110,17 @@ const reduceCharacters = (str: string) => {
 
 const Transactions = () => {
   const { id, token } = useContext(UserContext);
-  // console.log(id, token);
+  const [show, setShow] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
+
+  const toggleTransactionModal = (id: string) => {
+    setShow(!show);
+    setTransactionId(id);
+  };
+
+  const onClose = () => {
+    setShow(false);
+  };
 
   const { data, isLoading, isError } = useQuery(
     ["transactions", { id, token }],
@@ -177,18 +189,28 @@ const Transactions = () => {
               ₹{tnx.amount}
             </Table.Cell>
             <Table.Cell>
-              {/* <a
-                href="/tables"
-                className="font-medium text-blue-600 hover:underline dark:text-blue-500"
-              > */}
-              <Button size="xs" className="editBtn" color="light">
+              <Button
+                size="xs"
+                className="editBtn"
+                color="light"
+                onClick={() => toggleTransactionModal(tnx.uuid)}
+              >
                 Edit
               </Button>
-              {/* </a> */}
             </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
+      <TransactionModel
+        id={id}
+        show={show}
+        onClose={onClose}
+        token={token}
+        submit={updateTransaction}
+        transactionId={transactionId}
+        title="Edit Transaction"
+        // transactions={}
+      />
     </Table>
   );
 };
