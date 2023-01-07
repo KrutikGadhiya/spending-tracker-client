@@ -90,6 +90,18 @@ const TransactionModel = ({
         theme: "dark",
         autoClose: 2000,
       });
+
+      setTransaction({
+        amount: 0,
+        category: "select",
+        paidWith: "select",
+        transactionType: "select",
+        type: "select",
+        description: "",
+        date: new Date(),
+        userId: id,
+      });
+
       onClose();
     }
     setIsLoading(false);

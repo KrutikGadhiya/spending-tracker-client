@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { QueryClientProvider, QueryClient } from "react-query";
@@ -14,7 +14,7 @@ import "./index.css";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ToggleDarkModeProvider>
         <LoaderContextProvider>
@@ -26,5 +26,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </LoaderContextProvider>
       </ToggleDarkModeProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </StrictMode>
 );
