@@ -8,6 +8,30 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      manifest: {
+        name: "Spending Tracker",
+        short_name: "Spending Tracker",
+        start_url: "/",
+        display: "standalone",
+        background_color: "#ffffff",
+        lang: "en",
+        scope: "/",
+        icons: [
+          {
+            src: "/android-chrome-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+          {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
+          },
+        ],
+        theme_color: "#1F2937",
+      },
     }),
   ],
 });
