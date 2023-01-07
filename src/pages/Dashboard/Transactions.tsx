@@ -7,6 +7,7 @@ import { UserContext } from "../../context/UserContext";
 import { updateTransaction } from "../../api/transaction";
 import TransactionModel from "../../components/TranactionModal";
 import PackManLoading from "../../components/PackManLoading";
+import { Transaction } from "../../types";
 
 // const transactions = [
 //   {
@@ -111,11 +112,20 @@ const reduceCharacters = (str: string) => {
 const Transactions = () => {
   const { id, token } = useContext(UserContext);
   const [show, setShow] = useState(false);
-  const [transactionId, setTransactionId] = useState("");
+  const [transaction, setTransaction] = useState<Transaction>({
+    amount: 0,
+    category: "Personal",
+    paidWith: "UPI",
+    transactionType: "Debit",
+    type: "Spend",
+    description: "description...",
+    date: "",
+    userId: id,
+  });
 
-  const toggleTransactionModal = (id: string) => {
+  const toggleTransactionModal = (tnx: Transaction) => {
     setShow(!show);
-    setTransactionId(id);
+    setTransaction(tnx);
   };
 
   const onClose = () => {
@@ -193,7 +203,7 @@ const Transactions = () => {
                 size="xs"
                 className="editBtn"
                 color="light"
-                onClick={() => toggleTransactionModal(tnx.uuid)}
+                onClick={() => toggleTransactionModal(tnx)}
               >
                 Edit
               </Button>
@@ -207,9 +217,8 @@ const Transactions = () => {
         onClose={onClose}
         token={token}
         submit={updateTransaction}
-        transactionId={transactionId}
         title="Edit Transaction"
-        // transactions={}
+        selectedTnx={transaction}
       />
     </Table>
   );

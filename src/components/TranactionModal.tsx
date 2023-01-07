@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Modal, Label, Select, TextInput } from "flowbite-react";
 import { toast } from "react-toastify";
 
@@ -14,7 +14,7 @@ type TransactionModelProps = {
   token: string;
   transactionId?: string;
   title: string;
-  // transaction: Transaction;
+  selectedTnx?: any;
 };
 
 const TransactionModel = ({
@@ -23,20 +23,24 @@ const TransactionModel = ({
   id,
   submit,
   token,
-  transactionId,
+  selectedTnx,
   title,
 }: TransactionModelProps) => {
   const { setIsLoading } = useContext(LoaderContext);
-  const [transaction, setTransaction] = useState<Transaction>({
-    amount: 0,
-    category: "Personal",
-    paidWith: "UPI",
-    transactionType: "Debit",
-    type: "Spend",
-    description: "description...",
-    date: new Date(),
-    userId: id,
-  });
+  const [transaction, setTransaction] = useState<Transaction>(selectedTnx);
+
+  useEffect(() => {
+    setTransaction(selectedTnx);
+  }, [selectedTnx]);
+
+  useEffect(() => {
+    setTransaction({
+      ...transaction,
+      date: new Date().toISOString().slice(0, 10),
+    });
+  }, []);
+
+  // console.log(selectedTnx);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -49,12 +53,27 @@ const TransactionModel = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (
+      transaction?.transactionType === "select" ||
+      transaction?.category === "select" ||
+      transaction?.type === "select" ||
+      transaction?.paidWith === "select"
+    ) {
+      toast("Please select all the fields", {
+        type: "error",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
+      return;
+    }
     setIsLoading(true);
     // setTransaction({ ...transaction, userId: id });
-    console.log({ ...transaction, uuid: transactionId });
-    return;
+    // console.log({ ...transaction, uuid: selectedTnx?.uuid });
+    // setIsLoading(false);
+    // return;
     const { data, status } = await submit(
-      { ...transaction, uuid: transactionId },
+      { ...transaction, uuid: selectedTnx?.uuid },
       token
     );
     if (status !== 200) {
@@ -101,8 +120,11 @@ const TransactionModel = ({
                   name="transactionType"
                   onChange={handleChange}
                   required
+                  value={transaction?.transactionType}
+                  defaultValue="select"
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
+                  <option value="select">Select Transaction Type</option>
                   <option value="Debit">Debit</option>
                   <option value="Credit">Credit</option>
                 </Select>
@@ -118,11 +140,12 @@ const TransactionModel = ({
                   id="Type"
                   name="type"
                   onChange={handleChange}
-                  defaultValue="select"
+                  value={transaction?.type}
                   required
+                  defaultValue="select"
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                  <option value="select">Select category</option>
+                  <option value="select">Select Type</option>
                   <option value="Income">Income</option>
                   <option value="Spend">Spend</option>
                   <option value="Transfer">Transfer</option>
@@ -140,9 +163,12 @@ const TransactionModel = ({
                   name="paidWith"
                   id="paidWith"
                   onChange={handleChange}
+                  value={transaction?.paidWith}
+                  defaultValue="select"
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   required
                 >
+                  <option value="select">Select PaidWith</option>
                   <option value="Cash">Cash</option>
                   <option value="Card">Card</option>
                   <option value="UPI">UPI</option>
@@ -160,12 +186,13 @@ const TransactionModel = ({
                   id="category"
                   name="category"
                   onChange={handleChange}
-                  defaultValue="select"
+                  value={transaction?.category}
                   placeholder="Select category"
                   required
+                  defaultValue="select"
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                  <option value="select">Select category</option>
+                  <option value="select">Select Category</option>
                   <option value="Transport">Transport</option>
                   <option value="Food">Food</option>
                   <option value="Rent">Rent</option>
@@ -185,6 +212,7 @@ const TransactionModel = ({
                   type="number"
                   name="amount"
                   id="amount"
+                  value={transaction?.amount}
                   onChange={handleChange}
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="₹500"
@@ -203,8 +231,11 @@ const TransactionModel = ({
                   name="date"
                   id="date"
                   onChange={handleChange}
+                  value={new Date(transaction?.date || Date())
+                    .toISOString()
+                    .slice(0, 10)}
                   // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="₹500"
+                  // placeholder="₹500"
                   required
                 />
               </div>
@@ -220,6 +251,7 @@ const TransactionModel = ({
                   rows={4}
                   name="description"
                   onChange={handleChange}
+                  value={transaction?.description}
                   className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Write product description here"
                 ></textarea>

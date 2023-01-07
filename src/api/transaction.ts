@@ -38,14 +38,14 @@ export const getTransactions = async ({ queryKey }: any) => {
   const [_, params] = queryKey;
   // console.log(params);
   const { id: userId, token } = params;
-  console.log(`${BASE_URL}/api/transaction/${userId}`);
+  // console.log(`${BASE_URL}/api/transaction/${userId}`);
 
   const response = await axios.get(`${BASE_URL}/api/transaction/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response);
+  // console.log(response);
 
   return response;
 };
