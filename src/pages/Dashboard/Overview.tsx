@@ -50,15 +50,17 @@ const Overview = () => {
   }
 
   const overview = data?.data;
-  // console.log(overview);
+  console.log(overview);
 
   const totalTransactions =
-    Number.parseInt(overview.transactions[0].count) +
-      Number.parseInt(overview.transactions[1].count) || 0;
+    Number.parseInt(overview?.transactions[0]?.count) ||
+    0 + Number.parseInt(overview?.transactions[1]?.count) ||
+    0;
   const totalMoneyReceived =
-    Number.parseInt(overview.transactions[0].total) || 0;
-  const totalMoneySpent = Number.parseInt(overview.transactions[1].total) || 0;
-  const mostSpendOn = overview.mostSpendOn[0].category || "-";
+    Number.parseInt(overview?.transactions[0]?.total) || 0;
+  const totalMoneySpent =
+    Number.parseInt(overview?.transactions[1]?.total) || 0;
+  const mostSpendOn = overview?.mostSpendOn[0]?.category || "-";
 
   return (
     <div className="grid gap-2">
