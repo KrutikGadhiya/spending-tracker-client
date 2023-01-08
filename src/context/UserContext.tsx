@@ -55,7 +55,7 @@ const UserContextProvider: React.FC<Props> = ({ children }) => {
   };
 
   const logout = () => {
-    setUser(initialState);
+    setUser({ ...initialState, id: "", token: "" });
 
     localStorage.removeItem("user");
   };

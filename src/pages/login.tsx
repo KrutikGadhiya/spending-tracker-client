@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login as loginUser } from "../api/auth";
 
@@ -19,7 +19,7 @@ const login = () => {
 
   // context
   const { setIsLoading } = useContext(LoaderContext);
-  const { login } = useContext(UserContext);
+  const { login, token } = useContext(UserContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,6 +45,12 @@ const login = () => {
     setIsLoading(false);
     console.log(data);
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [token]);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">

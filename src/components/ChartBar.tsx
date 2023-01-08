@@ -46,16 +46,13 @@ const ChartBar = ({ data }: any) => {
         width={500}
         height={400}
         data={barData}
-        // margin={{
-        //   top: 5,
-        //   right: 30,
-        //   left: 20,
-        //   bottom: 5,
-        // }}
+        margin={{
+          left: 10,
+        }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
+        <XAxis dataKey="name" height={50} angle={-30} tickMargin={15} />
+        <YAxis width={40} tickFormatter={(data) => "₹" + data} />
         <Tooltip
           labelStyle={{ fontSize: "0.8rem" }}
           contentStyle={{ fontSize: "0.8rem" }}

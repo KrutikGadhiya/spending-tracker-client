@@ -49,3 +49,19 @@ export const getTransactions = async ({ queryKey }: any) => {
 
   return response;
 };
+
+export const deleteTransaction = async (
+  uuid: string,
+  token: string,
+  userId: string
+) => {
+  const response = await axios.delete(
+    `${BASE_URL}/api/transaction/?uuid=${uuid}&userId=${userId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};

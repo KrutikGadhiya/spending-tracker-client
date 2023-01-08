@@ -1,10 +1,16 @@
 import { useContext, useState } from "react";
-import { Table, Badge, Button } from "flowbite-react";
+import { Table, Badge, Button, Modal } from "flowbite-react";
+import { toast } from "react-toastify";
 import { useQuery } from "react-query";
-import { getTransactions } from "../../api/transaction";
-import { UserContext } from "../../context/UserContext";
 
-import { updateTransaction } from "../../api/transaction";
+import { UserContext } from "../../context/UserContext";
+import { LoaderContext } from "../../context/LoaderContext";
+
+import {
+  updateTransaction,
+  deleteTransaction,
+  getTransactions,
+} from "../../api/transaction";
 import TransactionModel from "../../components/TranactionModal";
 import PackManLoading from "../../components/PackManLoading";
 import { Transaction } from "../../types";
@@ -111,7 +117,10 @@ const reduceCharacters = (str: string) => {
 
 const Transactions = () => {
   const { id, token } = useContext(UserContext);
+  const { setIsLoading } = useContext(LoaderContext);
   const [show, setShow] = useState(false);
+  const [delModel, setDelModel] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
   const [transaction, setTransaction] = useState<Transaction>({
     amount: 0,
     category: "Personal",
@@ -126,6 +135,39 @@ const Transactions = () => {
   const toggleTransactionModal = (tnx: Transaction) => {
     setShow(!show);
     setTransaction(tnx);
+  };
+
+  const toggleDeleteTransactionModal = (tnx: string) => {
+    setDelModel(!delModel);
+    setTransactionId(tnx);
+  };
+
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      const { status, data } = await deleteTransaction(
+        transactionId,
+        token,
+        id
+      );
+      if (status == 200) {
+        toast("Transaction deleted successfully", {
+          type: "success",
+          position: "top-center",
+          theme: "dark",
+          autoClose: 2000,
+        });
+      }
+    } catch (error: any) {
+      toast(error?.response?.message || "Some error occurred", {
+        type: "error",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
+    }
+    setIsLoading(false);
+    setDelModel(false);
   };
 
   const onClose = () => {
@@ -207,10 +249,48 @@ const Transactions = () => {
               >
                 Edit
               </Button>
+              <Button
+                size="xs"
+                className="editBtn"
+                color="failure"
+                onClick={() => toggleDeleteTransactionModal(tnx.uuid)}
+              >
+                Delete
+              </Button>
             </Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
+      <Modal
+        show={delModel}
+        size="md"
+        popup={true}
+        onClose={() => setDelModel(false)}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <svg
+              className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200 fill-red-600"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z" />
+            </svg>
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this transaction?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={onDelete}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setDelModel(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
       <TransactionModel
         id={id}
         show={show}

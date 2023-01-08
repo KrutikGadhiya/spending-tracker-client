@@ -1,7 +1,16 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { UserContext } from "../../context/UserContext";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import Header from "../../components/Header";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { token } = useContext(UserContext);
+
+  useEffect(() => {
+    if (!token) navigate("/");
+  });
+
   return (
     <div className="">
       <Header />
