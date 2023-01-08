@@ -10,42 +10,42 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "Transport",
-    amount: 4000,
-  },
-  {
-    name: "Food",
-    amount: 3000,
-  },
-  {
-    name: "Rent",
-    amount: 2000,
-  },
-  {
-    name: "Personal",
-    amount: 2780,
-  },
-  {
-    name: "Balance",
-    amount: 1890,
-  },
-  {
-    name: "Other",
-    amount: 2390,
-  },
-];
-
 // Transport or Food or Rent or Personal or Balance or Other
 
-const ChartBar = () => {
+const ChartBar = ({ data }: any) => {
+  const barData = [
+    {
+      name: "Transport",
+      amount: data?.Transport || 0,
+    },
+    {
+      name: "Food",
+      amount: data?.Food || 0,
+    },
+    {
+      name: "Rent",
+      amount: data?.Rent || 0,
+    },
+    {
+      name: "Personal",
+      amount: data?.Personal || 0,
+    },
+    {
+      name: "Balance",
+      amount: data?.Balance || 0,
+    },
+    {
+      name: "Other",
+      amount: data?.Other || 0,
+    },
+  ];
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
         width={500}
         height={400}
-        data={data}
+        data={barData}
         // margin={{
         //   top: 5,
         //   right: 30,

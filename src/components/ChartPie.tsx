@@ -8,10 +8,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const ChartLine = () => {
-  const data = [
-    { name: "Credit", amount: 4000 },
-    { name: "Debit", amount: 3000 },
+const ChartLine = ({ data }: any) => {
+  const pieData = [
+    { name: "Credit", amount: data?.Credit || 0 },
+    { name: "Debit", amount: data?.Debit || 0 },
   ];
 
   return (
@@ -20,7 +20,7 @@ const ChartLine = () => {
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <Tooltip />
         <Pie
-          data={data}
+          data={pieData}
           type="monotone"
           dataKey="amount"
           // strokeWidth={2}

@@ -33,9 +33,9 @@ function nFormatter(num: number, digits: number) {
 }
 
 const Overview = () => {
-  const { token } = useContext(UserContext);
+  const { token, id } = useContext(UserContext);
   const { data, isLoading, isError } = useQuery(
-    ["transactions", { token }],
+    ["transactions", { token, userId: id }],
     getOverview,
     {
       refetchInterval: 30000,
@@ -53,14 +53,48 @@ const Overview = () => {
   console.log(overview);
 
   const totalTransactions =
-    Number.parseInt(overview?.transactions[0]?.count) ||
-    0 + Number.parseInt(overview?.transactions[1]?.count) ||
-    0;
+    Number.parseInt(overview?.transactions?.Debit?.count || 0) +
+    Number.parseInt(overview?.transactions?.Credit?.count || 0);
   const totalMoneyReceived =
-    Number.parseInt(overview?.transactions[0]?.total) || 0;
+    Number.parseInt(overview?.transactions?.Credit?.total) || 0;
   const totalMoneySpent =
-    Number.parseInt(overview?.transactions[1]?.total) || 0;
+    Number.parseInt(overview?.transactions?.Debit?.total) || 0;
   const mostSpendOn = overview?.mostSpendOn[0]?.category || "-";
+
+  const barData = {
+    Other: 0,
+    Rent: 0,
+    Balance: 0,
+    Food: 0,
+    Transport: 0,
+    Personal: 0,
+  };
+  overview?.mostSpendOn?.forEach(
+    (item: { category: string; total: string; count: string }) => {
+      switch (item?.category) {
+        case "Other":
+          barData.Other = Number.parseInt(item.total);
+          break;
+        case "Rent":
+          barData.Rent = Number.parseInt(item.total);
+          break;
+        case "Balance":
+          barData.Balance = Number.parseInt(item.total);
+          break;
+        case "Food":
+          barData.Food = Number.parseInt(item.total);
+          break;
+        case "Transport":
+          barData.Transport = Number.parseInt(item.total);
+          break;
+        case "Personal":
+          barData.Personal = Number.parseInt(item.total);
+          break;
+        default:
+          break;
+      }
+    }
+  );
 
   return (
     <div className="grid gap-2">
@@ -109,10 +143,12 @@ const Overview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <WhiteCard style={{ minHeight: "400px" }}>
           {/* <p className="text-center">Category</p> */}
-          <ChartBar />
+          <ChartBar data={barData} />
         </WhiteCard>
         <WhiteCard style={{ minHeight: "400px" }}>
-          <ChartPie />
+          <ChartPie
+            data={{ Debit: totalMoneySpent, Credit: totalMoneyReceived }}
+          />
         </WhiteCard>
         <WhiteCard style={{ minHeight: "400px" }}>
           <ChartRadarBar />
