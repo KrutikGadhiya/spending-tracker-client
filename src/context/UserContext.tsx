@@ -8,6 +8,7 @@ interface UserContextInterface {
   token: string;
   login: ({}: UserContextInterface) => void;
   logout: () => void;
+  refreshToken: string;
 }
 
 interface Props {
@@ -26,6 +27,7 @@ const initialState: UserContextInterface = {
   token: textUser ? JSON.parse(textUser).token : "",
   login: (user: UserContextInterface) => {},
   logout: () => {},
+  refreshToken: "",
 };
 
 const UserContextProvider: React.FC<Props> = ({ children }) => {
@@ -49,9 +51,12 @@ const UserContextProvider: React.FC<Props> = ({ children }) => {
       token: user.token,
       login: () => {},
       logout: () => {},
+      refreshToken: user.refreshToken,
     });
 
     localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("refreshToken", user.refreshToken);
+    localStorage.setItem("accessToken", user.token);
   };
 
   const logout = () => {

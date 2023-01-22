@@ -11,6 +11,7 @@ import { LoaderContext } from "./context/LoaderContext";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
+import ErrorSpaceShipScreen from "./components/ErrorSpaceShipScreen";
 
 const Dummy = ({ title }: { title: string }) => {
   return <h1 className="text-2xl">{title}</h1>;
@@ -37,7 +38,13 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Overview />} />
           <Route path="transactions" element={<Transactions />} />
-          <Route path="groups" element={<Dummy title="Groups" />} />
+          <Route
+            path="groups"
+            element={
+              <ErrorSpaceShipScreen error="this is the error we are trying to display" />
+            }
+          />
+          {/* <Route path="groups" element={<Dummy title="Groups" />} /> */}
         </Route>
       </Routes>
       <ToastContainer toastClassName="text-gray-900 bg-gray-100 shadow-md drop-shadow-md rounded-lg dark:text-gray-200 dark:bg-gray-700" />

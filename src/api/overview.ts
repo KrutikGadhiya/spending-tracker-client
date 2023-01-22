@@ -1,14 +1,11 @@
-import axios from "axios";
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
+// import axios from "axios";
+
+import { instance } from "./auth";
 
 export const getOverview = async ({ queryKey }: any) => {
   const [_, params] = queryKey;
   const { token, userId } = params;
 
-  const response = await axios.get(`${BASE_URL}/api/overview/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await instance.get(`/api/overview/${userId}`);
   return response;
 };

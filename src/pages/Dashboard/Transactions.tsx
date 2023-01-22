@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Table, Badge, Button, Modal } from "flowbite-react";
+import { Table, Badge, Button, Modal, Tooltip } from "flowbite-react";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 
@@ -15,98 +15,7 @@ import TransactionModel from "../../components/TranactionModal";
 import PackManLoading from "../../components/PackManLoading";
 import { Transaction } from "../../types";
 
-// const transactions = [
-//   {
-//     uuid: "1",
-//     amount: 500,
-//     category: "Food",
-//     transactionType: "Credit",
-//     type: "Spend",
-//     description: "Bought a pizza",
-//     date: "2021-01-01",
-//   },
-//   {
-//     uuid: "2",
-//     amount: 126,
-//     category: "Transport",
-//     transactionType: "Debit",
-//     type: "Spend",
-//     description: "BRTS to Meditab",
-//     date: "2021-01-02",
-//   },
-//   {
-//     uuid: "4",
-//     amount: 126,
-//     category: "Transport",
-//     transactionType: "Debit",
-//     type: "Spend",
-//     description: "BRTS to Meditab",
-//     date: "2021-01-02",
-//   },
-//   {
-//     uuid: "3",
-//     amount: 500,
-//     category: "Food",
-//     transactionType: "Credit",
-//     type: "Spend",
-//     description: "Bought a pizza",
-//     date: "2021-01-01",
-//   },
-//   {
-//     uuid: "5",
-//     amount: 500,
-//     category: "Food",
-//     transactionType: "Credit",
-//     type: "Spend",
-//     description: "Bought a pizza",
-//     date: "2021-01-01",
-//   },
-//   {
-//     uuid: "6",
-//     amount: 126,
-//     category: "Transport",
-//     transactionType: "Debit",
-//     type: "Spend",
-//     description: "BRTS to Meditab",
-//     date: "2021-01-02",
-//   },
-//   {
-//     uuid: "7",
-//     amount: 126,
-//     category: "Transport",
-//     transactionType: "Debit",
-//     type: "Spend",
-//     description: "BRTS to Meditab",
-//     date: "2021-01-02",
-//   },
-//   {
-//     uuid: "8",
-//     amount: 126,
-//     category: "Transport",
-//     transactionType: "Debit",
-//     type: "Spend",
-//     description: "BRTS to Meditab",
-//     date: "2021-01-02",
-//   },
-//   {
-//     uuid: "9",
-//     amount: 500,
-//     category: "Food",
-//     transactionType: "Credit",
-//     type: "Spend",
-//     description: "Bought a pizza",
-//     date: "2021-01-01",
-//   },
-//   {
-//     uuid: "10",
-//     amount: 500,
-//     category: "Food",
-//     transactionType: "Credit",
-//     type: "Spend",
-//     description: "Bought a pizza",
-//     date: "2021-01-01",
-//   },
-// ];
+import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
 
 const reduceCharacters = (str: string) => {
   if (str.length > 30) {
@@ -174,7 +83,7 @@ const Transactions = () => {
     setShow(false);
   };
 
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading, isError, error } = useQuery(
     ["transactions", { id, token }],
     getTransactions,
     {
@@ -188,7 +97,7 @@ const Transactions = () => {
     return <PackManLoading />;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <div>{JSON.stringify(error)}</div>;
   }
 
   return (
@@ -241,22 +150,28 @@ const Transactions = () => {
               ₹{tnx.amount}
             </Table.Cell>
             <Table.Cell>
-              <Button
-                size="xs"
-                className="editBtn"
-                color="light"
-                onClick={() => toggleTransactionModal(tnx)}
-              >
-                Edit
-              </Button>
-              <Button
-                size="xs"
-                className="editBtn"
-                color="failure"
-                onClick={() => toggleDeleteTransactionModal(tnx.uuid)}
-              >
-                Delete
-              </Button>
+              <div className="flex gap-1 my-auto">
+                <Tooltip content="Edit Transaction">
+                  <Button
+                    size="xl"
+                    className="editBtn"
+                    color="light"
+                    onClick={() => toggleTransactionModal(tnx)}
+                  >
+                    <RiEditLine />
+                  </Button>
+                </Tooltip>
+                <Tooltip content="Delete Transaction">
+                  <Button
+                    size="xl"
+                    className="editBtn"
+                    color="failure"
+                    onClick={() => toggleDeleteTransactionModal(tnx.uuid)}
+                  >
+                    <RiDeleteBin6Line />
+                  </Button>
+                </Tooltip>
+              </div>
             </Table.Cell>
           </Table.Row>
         ))}

@@ -258,6 +258,10 @@ const SideBarMenu = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   let sidebarRef = useClickOutside(() => setIsSidebarOpen(false));
 
   return (
@@ -313,7 +317,7 @@ const SideBarMenu = () => {
         <div className="overflow-y-auto py-5 px-3 h-full bg-white border-t border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
           <ul className="space-y-2">
             {sideNavLink.map((link, index) => (
-              <li key={index}>
+              <li key={index} onClick={closeSidebar}>
                 <NavLink
                   end
                   to={link.to}

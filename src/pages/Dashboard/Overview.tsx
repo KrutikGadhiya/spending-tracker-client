@@ -8,6 +8,7 @@ import ChartRadarBar from "../../components/ChartRadarBar";
 import { useQuery } from "react-query";
 import PackManLoading from "../../components/PackManLoading";
 import { getOverview } from "../../api/overview";
+import ErrorSpaceShipScreen from "../../components/ErrorSpaceShipScreen";
 
 function nFormatter(num: number, digits: number) {
   const lookup = [
@@ -34,7 +35,7 @@ function nFormatter(num: number, digits: number) {
 
 const Overview = () => {
   const { token, id } = useContext(UserContext);
-  const { data, isLoading, isError } = useQuery(
+  const { data, isLoading, isError, error } = useQuery(
     ["transactions", { token, userId: id }],
     getOverview,
     {
@@ -46,11 +47,11 @@ const Overview = () => {
     return <PackManLoading />;
   }
   if (isError) {
-    return <div>Error</div>;
+    return <ErrorSpaceShipScreen error={JSON.stringify(error)} />;
   }
 
   const overview = data?.data;
-  console.log(overview);
+  // console.log(overview);
 
   const totalTransactions =
     Number.parseInt(overview?.transactions?.Debit?.count || 0) +
