@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 // Pages & Components
 import { Login, SignUp } from "./pages";
 import LoaderScreen from "./components/LoaderScreen";
-import { Dashboard, Overview, Transactions } from "./pages/Dashboard";
+import { Dashboard, Overview, Transactions, Group } from "./pages/Dashboard";
 // Context
 import { LoaderContext } from "./context/LoaderContext";
 
@@ -38,12 +38,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Overview />} />
           <Route path="transactions" element={<Transactions />} />
-          <Route
-            path="groups"
-            element={
-              <ErrorSpaceShipScreen error="this is the error we are trying to display" />
-            }
-          />
+          <Route path="groups" element={<Group />} />
           {/* <Route path="groups" element={<Dummy title="Groups" />} /> */}
         </Route>
       </Routes>

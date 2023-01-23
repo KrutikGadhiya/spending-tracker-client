@@ -16,3 +16,25 @@ export type Transaction = {
   userId: string;
   uuid?: string;
 };
+
+export type User = {
+  id: number;
+  uuid: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Group = {
+  id: number;
+  uuid: string;
+  name: string;
+  description: string;
+  UserId: number;
+  createdAt: string;
+  updatedAt: string;
+  users: User[];
+  User: User;
+};
