@@ -1,4 +1,5 @@
 export type Transaction = {
+  id?: number;
   amount?: number;
   category?:
     | "Transport"
@@ -13,8 +14,12 @@ export type Transaction = {
   type?: "Income" | "Spend" | "Transfer" | "Balance" | "select";
   description?: string;
   date?: Date | string;
+  UserId?: number;
   userId: string;
   uuid?: string;
+  GroupId?: number | null | undefined;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type User = {

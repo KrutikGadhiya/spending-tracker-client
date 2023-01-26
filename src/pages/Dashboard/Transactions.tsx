@@ -92,6 +92,7 @@ const Transactions = () => {
   );
 
   const transactions = data?.data;
+  console.log(transactions);
 
   if (isLoading) {
     return <PackManLoading />;

@@ -15,7 +15,7 @@ const Home = () => {
     <div className="">
       <Header />
       <Sidebar />
-      <section className="p-2 lg:ml-64 mt-[64px] bg-gray-200 dark:bg-gray-700 min-h-[calc(100vh-60px)] relative">
+      <section className="p-2 lg:ml-64 mt-[60px] bg-gray-200 dark:bg-gray-700 min-h-[calc(100vh-60px)] relative">
         {/* <h1 className="text-2xl">Home</h1> */}
         <Outlet />
       </section>

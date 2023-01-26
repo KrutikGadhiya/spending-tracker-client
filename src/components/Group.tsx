@@ -5,7 +5,9 @@ import { useQuery } from "react-query";
 import { getGroup } from "../api/group";
 import PackManLoading from "./PackManLoading";
 import ErrorSpaceShipScreen from "./ErrorSpaceShipScreen";
+import Transaction from "../components/Transaction";
 import { User } from "../types";
+import styles from "../css/Group.module.css";
 
 const Group = () => {
   const { groupId } = useParams();
@@ -25,8 +27,132 @@ const Group = () => {
   const group = data?.data;
 
   return (
-    <div className="dark:text-gray-200 p-8">
-      <h1 className="text-4xl">Group: {groupId}</h1>
+    <div>
+      <h1
+        className="text-2xl dark:text-gray-200 flex items-center p-2 bg-white dark:bg-gray-800"
+        title={groupId}
+      >
+        <img
+          src={`https://api.dicebear.com/5.x/icons/svg?seed=${group.name}`}
+          width={30}
+          height={30}
+          className="rounded-full my-1 mr-4"
+        />{" "}
+        {group?.name}
+      </h1>
+      <div className="mt-2 h-[calc(100vh-140px)] overflow-y-auto">
+        <div className="flex flex-col gap-2">
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Debit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Credit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Debit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Credit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Debit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+          <Transaction
+            transaction={{
+              id: 50,
+              uuid: "87d9a24f-310e-4256-951e-ad35181b2439",
+              amount: 56,
+              category: "Food",
+              paidWith: "UPI",
+              transactionType: "Credit",
+              type: "Spend",
+              description: "Bread Butter, Brunch",
+              date: "2023-01-22T00:00:00.000Z",
+              userId: "dc51828b-665c-4dc5-90c9-dc72ce0e94db",
+              UserId: 1,
+              GroupId: null,
+              createdAt: "2023-01-22T13:07:55.358Z",
+              updatedAt: "2023-01-22T13:07:55.358Z",
+            }}
+          />
+        </div>
+      </div>
+      {/* <h1 className="text-4xl">Group: {groupId}</h1>
       <br />
       <p className="text-2xl">Owner: {group?.User.name}</p>
       <p className="text-2xl">Name: {group?.name}</p>
@@ -49,7 +175,7 @@ const Group = () => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 };
