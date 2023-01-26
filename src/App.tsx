@@ -6,12 +6,12 @@ import { ToastContainer } from "react-toastify";
 import { Login, SignUp } from "./pages";
 import LoaderScreen from "./components/LoaderScreen";
 import { Dashboard, Overview, Transactions, Group } from "./pages/Dashboard";
+import GroupDetails from "./components/Group";
 // Context
 import { LoaderContext } from "./context/LoaderContext";
 
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import ErrorSpaceShipScreen from "./components/ErrorSpaceShipScreen";
 
 const Dummy = ({ title }: { title: string }) => {
   return <h1 className="text-2xl">{title}</h1>;
@@ -19,15 +19,6 @@ const Dummy = ({ title }: { title: string }) => {
 
 function App() {
   const { isLoading } = useContext(LoaderContext);
-
-  // useEffect(() => {
-  //   toast("Hello World", {
-  //     type: "success",
-  //     position: "top-center",
-  //     theme: "dark",
-  //     autoClose: 2000,
-  //   });
-  // }, []);
 
   return (
     <div className="App">
@@ -38,7 +29,10 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route index element={<Overview />} />
           <Route path="transactions" element={<Transactions />} />
-          <Route path="groups" element={<Group />} />
+          <Route path="groups">
+            <Route index element={<Group />} />
+            <Route path=":groupId" element={<GroupDetails />} />
+          </Route>
           {/* <Route path="groups" element={<Dummy title="Groups" />} /> */}
         </Route>
       </Routes>

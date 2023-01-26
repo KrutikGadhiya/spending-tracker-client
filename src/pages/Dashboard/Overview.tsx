@@ -36,7 +36,7 @@ function nFormatter(num: number, digits: number) {
 const Overview = () => {
   const { token, id } = useContext(UserContext);
   const { data, isLoading, isError, error } = useQuery(
-    ["transactions", { token, userId: id }],
+    ["Overview", { token, userId: id }],
     getOverview,
     {
       refetchInterval: 30000,

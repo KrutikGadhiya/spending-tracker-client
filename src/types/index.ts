@@ -28,13 +28,21 @@ export type User = {
 };
 
 export type Group = {
-  id: number;
-  uuid: string;
+  id?: number;
+  uuid?: string;
   name: string;
   description: string;
-  UserId: number;
-  createdAt: string;
-  updatedAt: string;
-  users: User[];
-  User: User;
+  UserId?: number;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  users: User[] | string[];
+  User?: User;
+};
+
+export type GroupModalProps = {
+  show: boolean;
+  onClose: () => void;
+  title: string;
+  userId: string;
 };

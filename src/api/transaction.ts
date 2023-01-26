@@ -1,5 +1,5 @@
 // import axios from "axios";
-import { instance } from "./auth";
+import { instance } from "./main";
 
 import { Transaction } from "../types";
 const BASE_URL = import.meta.env.VITE_SERVER_URL;

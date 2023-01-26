@@ -1,6 +1,6 @@
 // import axios from "axios";
 
-import { instance } from "./auth";
+import { instance } from "./main";
 
 export const getOverview = async ({ queryKey }: any) => {
   const [_, params] = queryKey;
