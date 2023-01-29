@@ -15,11 +15,12 @@ export type Transaction = {
   description?: string;
   date?: Date | string;
   UserId?: number;
-  userId: string;
+  userId?: string;
   uuid?: string;
   GroupId?: number | null | undefined;
   createdAt?: string;
   updatedAt?: string;
+  User?: User;
 };
 
 export type User = {
