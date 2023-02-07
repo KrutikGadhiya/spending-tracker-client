@@ -21,3 +21,11 @@ export const getGroup = async ({ queryKey }: any) => {
   const response = await instance.get(`/api/group/${groupId}`);
   return response;
 };
+
+export const getGroupTransactions = async ({ queryKey }: any) => {
+  const [_, params] = queryKey;
+  const { groupId } = params;
+
+  const response = await instance.get(`/api/group/transaction/${groupId}`);
+  return response;
+};

@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
-import { getGroup } from "../api/group";
+import { getGroup, getGroupTransactions } from "../api/group";
 import PackManLoading from "./PackManLoading";
 import ErrorSpaceShipScreen from "./ErrorSpaceShipScreen";
 import TransactionMessage from "../components/Transaction";
@@ -164,6 +164,19 @@ const Group = () => {
     { refetchInterval: 30000 }
   );
 
+  const {
+    data: transactions,
+    isLoading: tnxIsLoading,
+    error: tnxError,
+    isError: tnxIsError,
+  } = useQuery(
+    [`group_transactions_${groupId}`, { groupId }],
+    getGroupTransactions,
+    {
+      refetchInterval: 30000,
+    }
+  );
+
   if (isLoading) {
     return <PackManLoading />;
   }
@@ -172,6 +185,7 @@ const Group = () => {
   }
 
   const group = data?.data;
+  const groupTransactions = transactions?.data;
 
   return (
     <div>
@@ -188,11 +202,17 @@ const Group = () => {
         {group?.name}
       </h1>
       <div className="mt-2">
-        <div className="flex flex-col gap-2">
-          {groupTransactions.map((tnx) => (
-            <TransactionMessage transaction={tnx} />
-          ))}
-        </div>
+        {tnxIsLoading ? (
+          <PackManLoading />
+        ) : tnxIsError ? (
+          <ErrorSpaceShipScreen error={JSON.stringify(tnxError)} />
+        ) : (
+          <div className="flex flex-col gap-2">
+            {groupTransactions.map((tnx: Transaction) => (
+              <TransactionMessage transaction={tnx} />
+            ))}
+          </div>
+        )}
       </div>
       {/* <h1 className="text-4xl">Group: {groupId}</h1>
       <br />
