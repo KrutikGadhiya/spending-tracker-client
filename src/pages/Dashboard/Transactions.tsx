@@ -91,7 +91,7 @@ const Transactions = () => {
     }
   );
 
-  const transactions = data?.data;
+  const transactions = data?.data?.transactions;
   console.log(transactions);
 
   if (isLoading) {
