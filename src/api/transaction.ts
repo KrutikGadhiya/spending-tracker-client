@@ -29,10 +29,14 @@ export const updateTransaction = async (
 export const getTransactions = async ({ queryKey }: any) => {
   const [_, params] = queryKey;
   // console.log(params);
-  const { id: userId, token } = params;
+  const { id: userId, page } = params;
+  console.log(page);
+
   // console.log(`${BASE_URL}/api/transaction/${userId}`);
 
-  const response = await instance.get(`${BASE_URL}/api/transaction/${userId}`);
+  const response = await instance.get(
+    `${BASE_URL}/api/transaction/${userId}?page=${page - 1}`
+  );
   // console.log(response);
 
   return response;
