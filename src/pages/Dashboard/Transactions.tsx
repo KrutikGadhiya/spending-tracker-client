@@ -148,7 +148,10 @@ const Transactions = () => {
               key={tnx.uuid}
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
-              <Table.Cell>{i + 1}</Table.Cell>
+              <Table.Cell>
+                {page - 1}
+                {i + 1}
+              </Table.Cell>
               <Table.Cell>{tnx.category}</Table.Cell>
               <Table.Cell>{tnx.type}</Table.Cell>
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
