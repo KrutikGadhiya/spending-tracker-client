@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { LoaderContext } from "../context/LoaderContext";
 import { Transaction } from "../types";
 import { createTransaction, updateTransaction } from "../api/transaction";
+import { useParams } from "react-router-dom";
 
 type TransactionModelProps = {
   show: boolean;
@@ -28,6 +29,7 @@ const TransactionModel = ({
 }: TransactionModelProps) => {
   const { setIsLoading } = useContext(LoaderContext);
   const [transaction, setTransaction] = useState<Transaction>(selectedTnx);
+  const { groupId } = useParams();
 
   useEffect(() => {
     setTransaction(selectedTnx);
@@ -53,6 +55,7 @@ const TransactionModel = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (
       transaction?.transactionType === "select" ||
       transaction?.category === "select" ||
@@ -73,7 +76,7 @@ const TransactionModel = ({
     // setIsLoading(false);
     // return;
     const { data, status } = await submit(
-      { ...transaction, uuid: selectedTnx?.uuid },
+      { ...transaction, uuid: selectedTnx?.uuid, groupId },
       token
     );
     if (status !== 200) {
