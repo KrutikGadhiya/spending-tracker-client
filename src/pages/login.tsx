@@ -7,6 +7,7 @@ import { LoaderContext } from "../context/LoaderContext";
 import { UserContext } from "../context/UserContext";
 
 import Logo from "../assets/logo.png";
+import { toast } from "react-toastify";
 
 const login = () => {
   const navigate = useNavigate();
@@ -38,9 +39,24 @@ const login = () => {
       loginDetails.email,
       loginDetails.password
     );
-    if (status === 200) {
-      login(data);
+    if (status == 200) {
+      login({ ...data, rememberMe: loginDetails.rememberMe });
+
       navigate("/dashboard");
+
+      toast("Login successfully", {
+        type: "success",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
+    } else {
+      toast(data?.message || "Invalid Email or Password!", {
+        type: "error",
+        position: "top-center",
+        theme: "dark",
+        autoClose: 2000,
+      });
     }
     setIsLoading(false);
     console.log(data);

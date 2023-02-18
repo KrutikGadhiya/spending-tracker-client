@@ -58,7 +58,7 @@ instance.interceptors.response.use(
 
 const refreshToken = async () => {
   try {
-    console.log("getLocalRefreshToken()", getLocalRefreshToken());
+    // console.log("getLocalRefreshToken()", getLocalRefreshToken());
 
     const response = await axios.post(`${BASE_URL}/api/user/refresh`, {
       refreshToken: getLocalRefreshToken(),
@@ -75,13 +75,19 @@ const refreshToken = async () => {
 };
 
 function getLocalAccessToken() {
-  const accessToken = window.localStorage.getItem("accessToken") || "";
+  const accessToken =
+    window.localStorage.getItem("accessToken") ||
+    window.sessionStorage.getItem("accessToken") ||
+    "";
   // console.log("User: ", user);
   return accessToken;
 }
 
 function getLocalRefreshToken() {
-  const refreshToken = window.localStorage.getItem("refreshToken") || "";
+  const refreshToken =
+    window.localStorage.getItem("refreshToken") ||
+    window.sessionStorage.getItem("refreshToken") ||
+    "";
   // console.log(user);
   return refreshToken;
 }
