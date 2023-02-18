@@ -86,7 +86,6 @@ const Header = () => {
           id={id}
           show={show}
           onClose={onClose}
-          token={token}
           submit={createTransaction}
           title="Add new transaction"
         />

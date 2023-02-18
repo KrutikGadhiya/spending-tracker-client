@@ -186,6 +186,7 @@ const Group = () => {
 
   const group = data?.data;
   const groupTransactions = transactions?.data;
+  console.log(transactions);
 
   return (
     <div>

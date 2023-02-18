@@ -12,7 +12,6 @@ type TransactionModelProps = {
   id: string;
   onClose: () => void;
   submit: typeof createTransaction | typeof updateTransaction;
-  token: string;
   transactionId?: string;
   title: string;
   selectedTnx?: any;
@@ -23,7 +22,6 @@ const TransactionModel = ({
   show,
   id,
   submit,
-  token,
   selectedTnx,
   title,
 }: TransactionModelProps) => {
@@ -75,10 +73,11 @@ const TransactionModel = ({
     // console.log({ ...transaction, uuid: selectedTnx?.uuid });
     // setIsLoading(false);
     // return;
-    const { data, status } = await submit(
-      { ...transaction, uuid: selectedTnx?.uuid, groupId },
-      token
-    );
+    const { data, status } = await submit({
+      ...transaction,
+      uuid: selectedTnx?.uuid,
+      groupId,
+    });
     if (status !== 200) {
       toast(data.message, {
         type: "error",
