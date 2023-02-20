@@ -235,7 +235,6 @@ const Transactions = () => {
           id={id}
           show={show}
           onClose={onClose}
-          token={token}
           submit={updateTransaction}
           title="Edit Transaction"
           selectedTnx={transaction}
