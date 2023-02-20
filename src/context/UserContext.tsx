@@ -9,6 +9,7 @@ interface UserContextInterface {
   login: ({}: UserContextInterface) => void;
   logout: () => void;
   refreshToken: string;
+  rememberMe: boolean;
 }
 
 interface Props {
@@ -28,6 +29,7 @@ const initialState: UserContextInterface = {
   login: (user: UserContextInterface) => {},
   logout: () => {},
   refreshToken: "",
+  rememberMe: false,
 };
 
 const UserContextProvider: React.FC<Props> = ({ children }) => {
@@ -52,17 +54,29 @@ const UserContextProvider: React.FC<Props> = ({ children }) => {
       login: () => {},
       logout: () => {},
       refreshToken: user.refreshToken,
+      rememberMe: user.rememberMe,
     });
 
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("refreshToken", user.refreshToken);
-    localStorage.setItem("accessToken", user.token);
+    if (user.rememberMe) {
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("refreshToken", user.refreshToken);
+      localStorage.setItem("accessToken", user.token);
+    } else {
+      sessionStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("refreshToken", user.refreshToken);
+      sessionStorage.setItem("accessToken", user.token);
+    }
   };
 
   const logout = () => {
     setUser({ ...initialState, id: "", token: "" });
 
     localStorage.removeItem("user");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
   };
 
   return (

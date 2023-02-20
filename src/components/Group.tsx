@@ -186,6 +186,7 @@ const Group = () => {
 
   const group = data?.data;
   const groupTransactions = transactions?.data;
+  console.log(transactions);
 
   return (
     <div>
@@ -209,7 +210,7 @@ const Group = () => {
         ) : (
           <div className="flex flex-col gap-2">
             {groupTransactions.map((tnx: Transaction) => (
-              <TransactionMessage transaction={tnx} />
+              <TransactionMessage key={tnx.id} transaction={tnx} />
             ))}
           </div>
         )}

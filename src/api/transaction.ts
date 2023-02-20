@@ -2,25 +2,18 @@
 import { instance } from "./main";
 
 import { Transaction } from "../types";
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
-export const createTransaction = async (
-  transaction: Transaction,
-  token: string
-) => {
-  const response = await instance.post(
-    `${BASE_URL}/api/transaction`,
-    transaction
-  );
+export const createTransaction = async (transaction: Transaction) => {
+  console.log(transaction);
+  // return { data: {}, status: 200 };
+
+  const response = await instance.post(`/api/transaction`, transaction);
   return response;
 };
 
-export const updateTransaction = async (
-  transaction: Transaction,
-  token: string
-) => {
+export const updateTransaction = async (transaction: Transaction) => {
   const response = await instance.put(
-    `${BASE_URL}/api/transaction/${transaction.uuid}`,
+    `/api/transaction/${transaction.uuid}`,
     transaction
   );
   return response;
@@ -35,7 +28,7 @@ export const getTransactions = async ({ queryKey }: any) => {
   // console.log(`${BASE_URL}/api/transaction/${userId}`);
 
   const response = await instance.get(
-    `${BASE_URL}/api/transaction/${userId}?page=${page - 1}`
+    `/api/transaction/${userId}?page=${page - 1}`
   );
   // console.log(response);
 
@@ -48,7 +41,7 @@ export const deleteTransaction = async (
   userId: string
 ) => {
   const response = await instance.delete(
-    `${BASE_URL}/api/transaction/?uuid=${uuid}&userId=${userId}`
+    `/api/transaction/?uuid=${uuid}&userId=${userId}`
   );
   return response;
 };

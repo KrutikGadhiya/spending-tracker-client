@@ -1,7 +1,11 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
-// console.log("BASE_URL", BASE_URL);
+const isProd = import.meta.env.ENV === "production";
+const BASE_URL = isProd
+  ? import.meta.env.VITE_SERVER_URL
+  : import.meta.env.VITE_DEV_SERVER_URL;
+console.log("isProd", isProd);
+console.log("BASE_URL", BASE_URL);
 
 export const instance = axios.create({
   baseURL: BASE_URL,
@@ -54,7 +58,7 @@ instance.interceptors.response.use(
 
 const refreshToken = async () => {
   try {
-    console.log("getLocalRefreshToken()", getLocalRefreshToken());
+    // console.log("getLocalRefreshToken()", getLocalRefreshToken());
 
     const response = await axios.post(`${BASE_URL}/api/user/refresh`, {
       refreshToken: getLocalRefreshToken(),
@@ -71,13 +75,19 @@ const refreshToken = async () => {
 };
 
 function getLocalAccessToken() {
-  const accessToken = window.localStorage.getItem("accessToken") || "";
+  const accessToken =
+    window.localStorage.getItem("accessToken") ||
+    window.sessionStorage.getItem("accessToken") ||
+    "";
   // console.log("User: ", user);
   return accessToken;
 }
 
 function getLocalRefreshToken() {
-  const refreshToken = window.localStorage.getItem("refreshToken") || "";
+  const refreshToken =
+    window.localStorage.getItem("refreshToken") ||
+    window.sessionStorage.getItem("refreshToken") ||
+    "";
   // console.log(user);
   return refreshToken;
 }

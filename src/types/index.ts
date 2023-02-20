@@ -21,6 +21,7 @@ export type Transaction = {
   createdAt?: string;
   updatedAt?: string;
   User?: User;
+  groupId?: string;
 };
 
 export type User = {

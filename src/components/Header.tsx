@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion, useCycle } from "framer-motion";
 
 import TransactionModel from "../components/TranactionModal";
 
@@ -86,7 +87,6 @@ const Header = () => {
           id={id}
           show={show}
           onClose={onClose}
-          token={token}
           submit={createTransaction}
           title="Add new transaction"
         />
@@ -251,6 +251,27 @@ const ProfileMenu = ({ name, email }: { name: string; email: string }) => {
   );
 };
 
+const itemVariants = {
+  closed: {
+    opacity: 0,
+  },
+  open: { opacity: 1 },
+};
+const sideVariants = {
+  closed: {
+    transition: {
+      staggerChildren: 0.2,
+      staggerDirection: -1,
+    },
+  },
+  open: {
+    transition: {
+      staggerChildren: 0.2,
+      staggerDirection: 1,
+    },
+  },
+};
+
 const SideBarMenu = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -298,42 +319,69 @@ const SideBarMenu = () => {
         </svg>
         <span className="sr-only">Toggle sidebar</span>
       </button>
-      <div
-        className={`${
-          isSidebarOpen ? "" : "hidden"
-        } overflow-hidden z-50 my-4 min-w-[16rem] h-screen max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 drop-shadow-lg dark:divide-gray-600 dark:bg-gray-700`}
-        id="notification-dropdown"
-        style={
-          isSidebarOpen
-            ? {
-                position: "absolute",
-                top: "64px",
-                left: "0px",
-                margin: "0px",
-              }
-            : {}
-        }
-      >
-        <div className="overflow-y-auto py-5 px-3 h-full bg-white border-t border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-          <ul className="space-y-2">
-            {sideNavLink.map((link, index) => (
-              <li key={index} onClick={closeSidebar}>
-                <NavLink
-                  end
-                  to={link.to}
-                  style={({ isActive }) =>
-                    isActive ? activeSideNavLink : undefined
-                  }
-                  className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                >
-                  {link.icon}
-                  <span className="ml-3">{link.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{
+              x: 0,
+              opacity: 1,
+              // position: "absolute",
+              // top: "64px",
+              // left: "0px",
+              // margin: "0px",
+            }}
+            exit={{
+              x: -100,
+              opacity: 0,
+              transition: { duration: 0.3 },
+            }}
+            className={`absolute top-[64px] left-0 overflow-hidden z-50 min-w-[16rem] h-screen max-w-sm text-base list-none bg-white rounded divide-y divide-gray-100 drop-shadow-lg dark:divide-gray-600 dark:bg-gray-700`}
+            id="notification-dropdown"
+            // style={
+            //   isSidebarOpen
+            //     ? {
+            //         position: "absolute",
+            //         top: "64px",
+            //         left: "0px",
+            //         margin: "0px",
+            //       }
+            //     : {}
+            // }
+          >
+            <div className="overflow-y-auto py-5 px-3 h-full bg-white border-t border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+              <motion.ul
+                className="space-y-2"
+                initial="closed"
+                animate="open"
+                exit="closed"
+                variants={sideVariants}
+              >
+                {sideNavLink.map((link, index) => (
+                  <motion.li
+                    key={index}
+                    onClick={closeSidebar}
+                    whileHover={{ scale: 1.01 }}
+                    variants={itemVariants}
+                  >
+                    <NavLink
+                      end
+                      to={link.to}
+                      style={({ isActive }) =>
+                        isActive ? activeSideNavLink : undefined
+                      }
+                      className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                    >
+                      {link.icon}
+                      <span className="ml-3">{link.label}</span>
+                    </NavLink>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex mr-4">
         <img src={Logo} className="mr-3 h-8" alt="FlowBite Logo" />
         <span className="self-center hidden md:block text-2xl font-semibold whitespace-nowrap dark:text-white">
